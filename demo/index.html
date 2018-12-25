@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+    <head>		
+        <title>Form</title>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" type="text/css"  href="css/style.css" />
+
+        <script src="js/jquery.min.js"></script>
+        <script src="js/validate.min.js"></script>
+        <script src="js/main.js"></script>
+
+    </head>
+
+
+    <body>
+        <div id="popup-zvonok" class="white-popup zoom-anim-dialog mfp-hide popup-content-mini">
+            <div class="form">
+                <div class="popup-form">
+                    <div class="form-head">
+                        Заказать звонок
+                    </div>
+                    <div class="form-desk">
+                        Оставьте свой номер - перезвоним в самое ближайшее рабочее время
+                    </div>
+                    <form method="POST" action="<?php echo home_url();?>/thank">
+                        <input type="hidden" name="formid" value="Запросить смету">
+                        <input type="hidden" name="title" value="<?php wp_title(); ?>">
+                        <div class="hidden"><input type="text" name="tel"/></div>
+                        <div class="form-group">
+                            <input type="text" name="name1" class="form-control" placeholder="Ваше имя"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="phone" class="form-control required input-lg inp" placeholder="Номер телефона"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email1" class="form-control input-lg" placeholder="Ваша почта"/>
+                        </div>
+                        <div class="form-group checkbox lt">
+                            <input class="form-control agreement" type="checkbox" checked="checked" value="Согласие на обработку данных" name="Agreement" id="agreement1">
+                            <label class="agreement-label" for="agreement1">
+                                Я даю свое согласие на обработку персональных данных и соглашаюсь с <a href="#" >политикой конфиденциальности</a>
+                            </label>
+                        </div>
+                        <div class="button">
+                            <input type="submit" name="send" class="btn" value="Перезвоните мне">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div id="popup-price" class="white-popup zoom-anim-dialog mfp-hide popup-content-mini">
+		<div class="form">
+			<div class="popup-form">
+				<div class="form-head">
+					Запросить смету
+				</div>
+				<div class="form-desk">
+					Оставьте номер телефона для уточнения ряда технических деталей и Ваших пожеланий, а также e-mail, куда отправить смету
+				</div>
+				<form method="POST" action="<?php echo home_url();?>/thank">
+					<input type="hidden" name="formid" value="Запросить смету">
+					<input type="hidden" name="title" value="<?php wp_title(); ?>">
+					<div class="hidden"><input type="text" name="tel"/></div>
+					<div class="form-group">
+						<input type="text" name="name1" class="form-control" placeholder="Ваше имя"/>
+					</div>
+					<div class="form-group">
+						<input type="text" name="phone" class="form-control required input-lg inp" placeholder="Номер телефона"/>
+					</div>
+					<div class="form-group">
+						<input type="email" name="email1" class="form-control input-lg" placeholder="Ваша почта"/>
+					</div>
+					<div class="form-group checkbox lt">
+						<input class="form-control agreement" type="checkbox" checked="checked" value="Согласие на обработку данных" name="Agreement" id="agreement2">
+						<label class="agreement-label" for="agreement2">
+							Я даю свое согласие на обработку персональных данных и соглашаюсь с <a href="#" >политикой конфиденциальности</a>
+						</label>
+					</div>
+					<div class="button">
+						<button type="submit" name="send" class="btn" value="Перезвоните мне"></button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+        
+    </body>
+</html>
