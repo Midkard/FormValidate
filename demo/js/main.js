@@ -1,5 +1,7 @@
 $(function(){
-    $('form').validate();
+    $('form').validate({
+        hideLabels: false
+    });
 });
 
 

@@ -1,7 +1,3 @@
-/*
- * Validate plugin
- * version: 1.1.0
-*/
 (function ($) {
     "use strict";
     /**
@@ -9,10 +5,17 @@
      * this указывает на коллекцию элементов
      * 
      */
-    $.fn.validate = function () {
+    $.fn.validate = function (options) {
         // Если коллекция пуста, то заканчиваем сразу
         if (!this.length) {
             return;
+        }
+        options = options ? options : {};
+        
+        if (options.hideLabels !== undefined) {
+            hideLabels = options.hideLabels;
+        } else {
+            hideLabels = true;
         }
 
         //Здесь проходим по каждому элементу коллекции
@@ -51,7 +54,8 @@
         return this;
     };
     
-
+    var hideLabels;
+    
     /**
      * Здесь расположены регулярные выражения для тестирования. rule и numeric вспомогательные(менять не желательно).
      * Остальные можно менять.
@@ -476,6 +480,9 @@
             remove = remove || false;
             
             //Изменяем класс соседнего label
+            if (! hideLabels) {
+                return;
+            }
             if (remove) {
                 if (!isEmpty) {
                     this.$placeholder.addClass('label-none');

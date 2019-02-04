@@ -1,11 +1,12 @@
 "use strict";
 
 const gulp       = require('gulp'), // Подключаем Gulp
-    concat       = require('gulp-concat'), // Подключаем gulp-concat (для конкатенации файлов)
+    concat       = require('gulp-concat-util'), // Подключаем gulp-concat (для конкатенации файлов)
     uglify       = require('gulp-uglify'), // Подключаем gulp-uglify (для сжатия JS)
     watch        = require('gulp-watch'),
     fs           = require('fs');
 
+const pkg = require('./package.json');
 
 const modules_path = 'node_modules/';
 
@@ -44,6 +45,7 @@ gulp.task('build', ['clean', 'libs'], function() {
     gulp.src('src/*.js')
             .pipe(concat('validate.min.js'))
             .pipe(uglify())
+            .pipe(concat.header('/**\n* ' + pkg.name + ' v' + pkg.version + '\n*/\n'))
             .pipe(gulp.dest('dist'))
             .pipe(gulp.dest('demo/js'));
     
