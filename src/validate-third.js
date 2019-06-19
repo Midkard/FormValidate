@@ -1,5 +1,12 @@
 $(function(){
 
+    $('label.agreement-label').click(function(ev) {
+        ev.preventDefault();
+        var input = $(this).siblings('input');
+        var state = ! input.prop("checked");
+        input.prop("checked", state);
+        input.change();
+    });
     //Для сброса фокуса с поля в попапе, при клике по контенту
     if (! $.fancybox) {
 		return;
