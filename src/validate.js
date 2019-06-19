@@ -592,12 +592,12 @@
             that.checkbox.change();
             that.hide();
         });
-        this.overlay.click(function() {
-            that.hide();
-        });
-        this.popup.find('.icon').click(function () {
-            that.hide();
-        });
+//        this.overlay.click(function() {
+//            that.hide();
+//        });
+//        this.popup.find('.icon').click(function () {
+//            that.hide();
+//        });
     };
 
     $.extend(Popup.prototype, {
