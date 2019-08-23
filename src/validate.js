@@ -100,7 +100,7 @@
             , rule: 'alpha|min_length[2]'
         }
         , {
-            el: '[name="email1"]'
+            el: '[name="email1"], [name="email"]'
             , rule: 'valid_email'
         }
         , {
