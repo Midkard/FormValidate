@@ -30,11 +30,21 @@
 //            this.attr("novalidate", "novalidate");
 
             // Adding mask
-            $(this).find(".inp").mask("+7 (999) 999-99-99", {
-                completed: function(){
+            $( this ).find( ".inp" ).mask( '+Z (000) 000-00-00', {
+                translation: {
+                    'Z': {
+                        pattern: /[78]/
+                    },
+                    '+': {
+                        pattern: /\+/,
+                        optional: true
+                    }
+                },
+                onComplete: function(){
                     $(this).trigger('completed');
                 }
-            });
+            } );
+
             // Скрытие открытие textarea
             $(this).find('span.add-textarea').click( function(){
                 $(this).toggleClass('opened');
@@ -64,7 +74,7 @@
             , numericRegex = /^[0-9]+$/
             , emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/
             , alphaRegex = /^[а-яё ]*$/i
-            , phoneRegex = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/
+            , phoneRegex = /^(\+7|8) \(\d{3}\) \d{3}-\d{2}-\d{2}$/
             ;
            
     /**

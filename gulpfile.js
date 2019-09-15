@@ -3,7 +3,6 @@
 const gulp       = require('gulp'), // Подключаем Gulp
     concat       = require('gulp-concat-util'), // Подключаем gulp-concat (для конкатенации файлов)
     uglify       = require('gulp-uglify'), // Подключаем gulp-uglify (для сжатия JS)
-    watch        = require('gulp-watch'),
     fs           = require('fs');
 
 const pkg = require('./package.json');
@@ -18,7 +17,9 @@ function error(err){
 function libs() {
 
     let paths = [
-        modules_path+'jquery.maskedinput/src/jquery.maskedinput.js',
+//        modules_path+'jquery.maskedinput/src/jquery.maskedinput.js',
+        modules_path+'jquery-mask-plugin/dist/jquery.mask.min.js',
+//        modules_path+'cleave.js/dist/addons/cleave-phone.ru.js',
     ]
     let libs = new Promise((resolve, reject) => {
 		gulp.src(paths)
@@ -39,7 +40,7 @@ gulp.task('clean', function(cb) {
     cb();
 })
 
-gulp.task('build', ['clean', 'libs'], function() {
+gulp.task('build', gulp.series('clean', 'libs'), function() {
 
 // Переносим скрипты в продакшен
     gulp.src('src/*.js')
@@ -52,7 +53,7 @@ gulp.task('build', ['clean', 'libs'], function() {
 
 })
 
-gulp.task('default', ['build']);
+gulp.task('default', gulp.series('build'));
 
 
 function mkdir(dir) {
