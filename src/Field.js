@@ -70,11 +70,11 @@ var Field = function ( elem, rules, parent ) {
     }
     //Если есть placeholder
     if ( this.$placeholder ) {
-        elem.on( 'focusin', function () {
-            field._placeholder();
+        elem.on( 'focusin input', function () {
+            field._placeholder( true );
         } );
         elem.on( 'focusout', function () {
-            field._placeholder( true );
+            field._placeholder(  );
         } );
     }
 
@@ -277,11 +277,11 @@ $.extend( Field.prototype, {
             return;
         }
         if ( remove ) {
-            if ( !isEmpty ) {
-                this.$placeholder.addClass( 'label-none' );
-            }
+            this.$placeholder.addClass( 'label-none' );
         } else {
-            this.$placeholder.removeClass( 'label-none' );
+            if ( isEmpty ) {
+                this.$placeholder.removeClass( 'label-none' );
+            }
         }
 
     }
