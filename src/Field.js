@@ -94,6 +94,14 @@ $.extend( Field.prototype, {
         if ( !this.rules ) {
             return true;
         }
+        //валидация приостановлена
+        if (this.elem.attr( 'data-validation') === 'stopvalidation' ) {
+            this.valid = true;
+            this.value = null;
+            this._removeError();
+            return true;
+        }
+        
         //Если мы уже тестировали текущее значение, в других евентах, то выходим
         if ( this.value === this.elem.val() && silent ) {
             return;
@@ -176,11 +184,13 @@ $.extend( Field.prototype, {
                 this._setError( errors );
             }
             this.valid = false;
+            this.elem.attr( 'data-validation', 'invalid' );
         } else {
             // if (!silent) {
             this._removeError();
             // }
             this.valid = true;
+            this.elem.attr( 'data-validation', 'valid' );
         }
         return this.valid;
     }

@@ -10,15 +10,15 @@ export var rules = [
         , rule: 'required'
     }
     , {
-        el: '.inp'
+        el: '.inp, .valid_phone'
         , rule: 'valid_phone'
     }
     , {
-        el: '[name="name1"]'
+        el: '[name="name1"], .valid_name'
         , rule: 'alpha|min_length[2]'
     }
     , {
-        el: '[name="email1"], [name="email"]'
+        el: '[name="email1"], [name="email"], .valid_email'
         , rule: 'valid_email'
     }
     , {
