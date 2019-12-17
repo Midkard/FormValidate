@@ -1,6 +1,7 @@
 $(function(){
     $('form').validate({
-        hideLabels: true
+        hideLabels: false,
+        validateOnBlur: true,
     });
 });
 

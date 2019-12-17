@@ -1,12 +1,12 @@
 import $ from 'jquery';
-import {popupRender, overlayRender} from './settings';
+
 /**
  * Popup Class
  * @returns {validateL#2.Popup}
  */
-var Popup = function () {
-    this.popup = $( popupRender ).appendTo( 'body' );
-    this.overlay = $( overlayRender ).appendTo( 'body' );
+var Popup = function (props) {
+    this.popup = $( props.popupRender ).appendTo( 'body' );
+    this.overlay = $( props.overlayRender ).appendTo( 'body' );
     this.checkbox = null;
     var that = this;
     this.popup.find( '.confirm' ).click( function () {
@@ -37,10 +37,10 @@ $.extend( Popup.prototype, {
 
 var popup;
 
-export default function   getPopup() {
+export default function   getPopup(props) {
     //Если не создана всплывашка для соглашения на обработку, то тутт ее создаем. Она одна на все формы
     if ( !popup ) {
-        popup = new Popup();
+        popup = new Popup(props);
     }
     return popup;
 };

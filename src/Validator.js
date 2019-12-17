@@ -1,15 +1,17 @@
 import $ from 'jquery';
-import {rules as defaultRules} from './settings';
 import Field from './Field';
 
 /**
  * Validator Class. Валидатор для формы. Один на всю форму.
- * @param {nodeElement} form
+ * @param formElement form
+ * @param array opts
  * 
  */
-var Validator = function ( form ) {
+var Validator = function ( form, opts ) {
+
     this.form = form;
-    this.allRules = defaultRules;
+    this.allRules = opts.rules;
+    this.opts = opts;
     this.buttons = [];
     this.fields = [];
 

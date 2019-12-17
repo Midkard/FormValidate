@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import {messages, ruleRegex, emailRegex, numericRegex, phoneRegex, alphaRegex, isHideLabels} from './settings';
 import getPopup from './Popup';
 
 /**
@@ -13,6 +12,8 @@ import getPopup from './Popup';
 var Field = function ( elem, rules, parent ) {
     this.elem = elem;
     this.rules = rules;
+    this.validator = parent;
+    this.opts = parent.opts;
     this.value = null;
     this.oldValue = '';
 
@@ -36,7 +37,7 @@ var Field = function ( elem, rules, parent ) {
             // if validity changed then check buttons
             if ( value !== _valid ) {
                 _valid = value;
-                parent._checkButtons();
+                this.validator._checkButtons();
             }
         }
     } );
@@ -47,9 +48,14 @@ var Field = function ( elem, rules, parent ) {
     //Привязываем обработчики к собятиям элемента
     var field = this;
     if ( this.rules ) {
-        elem.on( 'blur change completed', function () {
+        elem.on( 'change completed', function () {
             field._validate();
         } );
+        if (this.opts.validateOnBlur) {
+            elem.on( 'blur', function () {
+                field._validate();
+            } );
+        }
         elem.on( 'input keypress keydown paste', function () {
             field._validate( true );
         } );
@@ -124,7 +130,7 @@ $.extend( Field.prototype, {
             var method = rules[i],
                     param = null,
                     failed = false,
-                    parts = ruleRegex.exec( method );
+                    parts = this.opts.ruleRegex.exec( method );
 
             /*
              * If this field is not required and the value is empty, break.
@@ -168,7 +174,7 @@ $.extend( Field.prototype, {
 
             if ( failed ) {
 
-                var message = messages[method];
+                var message = this.opts.messages[method];
 
                 if ( param ) {
                     message = message.replace( '%s', param );
@@ -220,7 +226,7 @@ $.extend( Field.prototype, {
         // Для alpha              
         remove = remove || false;
 
-        var tip = messages['alpha'];
+        var tip = this.opts.messages['alpha'];
 
         if ( !remove ) {
             if ( !this.tipElem ) {
@@ -283,7 +289,7 @@ $.extend( Field.prototype, {
         remove = remove || false;
 
         //Изменяем класс соседнего label
-        if ( !isHideLabels() ) {
+        if ( !this.opts.hideLabels ) {
             return;
         }
         if ( remove ) {
@@ -340,15 +346,15 @@ $.extend( Field.prototype, {
         }
 
         , valid_email: function () {
-            return emailRegex.test( this.value );
+            return this.opts.emailRegex.test( this.value );
         }
 
         , valid_phone: function () {
-            return phoneRegex.test( this.value );
+            return this.opts.phoneRegex.test( this.value );
         }
 
         , min_length: function ( length ) {
-            if ( !numericRegex.test( length ) ) {
+            if ( !this.opts.numericRegex.test( length ) ) {
                 return false;
             }
 
@@ -356,7 +362,7 @@ $.extend( Field.prototype, {
         }
 
         , alpha: function () {
-            return (alphaRegex.test( this.value ));
+            return (this.opts.alphaRegex.test( this.value ));
         }
 
         , agreement: function () {
@@ -364,7 +370,7 @@ $.extend( Field.prototype, {
             if ( (type === 'checkbox') || (type === 'radio') ) {
                 var res = (this.elem[0].checked === true);
                 if ( !res ) {
-                    getPopup().show( this.elem );
+                    getPopup(this.opts).show( this.elem );
                 }
                 ;
                 return res;
