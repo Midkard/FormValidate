@@ -76,6 +76,7 @@ var Field = function ( elem, rules, parent ) {
     }
     //Если есть placeholder
     if ( this.$placeholder ) {
+        field._placeholder( true );
         elem.on( 'focusin input', function () {
             field._placeholder( true );
         } );

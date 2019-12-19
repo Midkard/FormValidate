@@ -1,6 +1,6 @@
 {
   "name": "@midkard/formValidate",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Ftont-end form validation",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
