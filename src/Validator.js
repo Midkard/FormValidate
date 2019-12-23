@@ -88,7 +88,6 @@ $.extend( Validator.prototype, {
             if ( !field._validate() ) {
                 error = true;
             }
-            ;
 
         }
 
@@ -121,14 +120,16 @@ $.extend( Validator.prototype, {
 
         }
 
-        var state = false;
         if ( error ) {
-            state = true;
+            for ( var i = 0; i < this.buttons.length; i++ ) {
+                this.buttons[i].classList.add('disabled');
+            }
+        } else {
+            for ( var i = 0; i < this.buttons.length; i++ ) {
+                this.buttons[i].classList.remove('disabled');
+            }
         }
 
-        for ( var i = 0; i < this.buttons.length; i++ ) {
-            this.buttons[i].disabled = state;
-        }
 
     }
 
