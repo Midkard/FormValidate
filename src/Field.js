@@ -175,7 +175,10 @@ $.extend( Field.prototype, {
 
             if ( failed ) {
 
-                var message = this.opts.messages[method];
+                var message = this.elem.data(method);
+                if (!message) {
+                    message = this.opts.messages[method];
+                }
 
                 if ( param ) {
                     message = message.replace( '%s', param );
