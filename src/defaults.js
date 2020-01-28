@@ -60,7 +60,7 @@ export default {
                             <svg viewBox=\"0 0 22 22\"><path d=\"M.35.35,21.82,21.82\"/><path d=\"M21.82.35.35,21.82\"/></svg>\
                     </div>\
                     <h2>Внимание!</h2>\
-                    <p>Вы не согласились с нашей <a href=\"//privacy-policy/\" >политикой конфиденциальности</a>. По Закону, мы не имеем права получать ваши контакты.</p>\
+                    <p>Вы не согласились с нашей <a href=\"{privacy}\" >политикой конфиденциальности</a>. По Закону, мы не имеем права получать ваши контакты.</p>\
                     <div class=\"button\">\
                             <button class=\"confirm btn\">Согласиться с политикой</button>\
                     </div>\
@@ -71,6 +71,7 @@ export default {
 
     validateOnBlur : true,
     
+    privacy : '/privacy-policy/'
     
     
     

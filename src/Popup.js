@@ -5,7 +5,7 @@ import $ from 'jquery';
  * @returns {validateL#2.Popup}
  */
 var Popup = function (props) {
-    this.popup = $( props.popupRender ).appendTo( 'body' );
+    this.popup = $( props.popupRender.replace('{privacy}', props.privacy) ).appendTo( 'body' );
     this.overlay = $( props.overlayRender ).appendTo( 'body' );
     this.checkbox = null;
     var that = this;
