@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 export default function init3rd() {
-    $( 'label.agreement-label' ).click( function ( ev ) {
+    $( 'label.agreement-label .check' ).click( function ( ev ) {
         ev.preventDefault();
         var input = $( this ).siblings( 'input' );
         var state = !input.prop( "checked" );

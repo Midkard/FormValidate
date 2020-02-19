@@ -7,24 +7,24 @@ export default {
  */
     rules: [
         {
-            el: '.required'
-            , rule: 'required'
-        }
-        , {
-            el: '.inp, .valid_phone'
-            , rule: 'valid_phone'
-        }
-        , {
-            el: '[name="name1"], .valid_name'
-            , rule: 'alpha|min_length[2]'
-        }
-        , {
-            el: '[name="email1"], [name="email"], .valid_email'
-            , rule: 'valid_email'
-        }
-        , {
-            el: '.agreement'
-            , rule: 'agreement'
+            el: '.required',
+            rule: 'required'
+        },
+        {
+            el: '.inp, .valid_phone',
+            rule: 'valid_phone'
+        },
+        {
+            el: '[name="name1"], .valid_name',
+            rule: 'alpha|min_length[2]'
+        },
+        {
+            el: '[name="email1"], [name="email"], .valid_email',
+            rule: 'valid_email'
+        },
+        {
+            el: '.agreement',
+            rule: 'agreement'
         }
     ],
 
@@ -43,12 +43,11 @@ export default {
  * Ключ соответствует названию функции в Field._hooks
  */
     messages : {
-        required: "Пожалуйста, заполните поле."
-        , valid_email: "Введите корректный email."
-        , valid_phone: "Введите корректный номер телефона."
-        , alpha: 'Это поле может содержать только буквы русского алфавита.'
-        , min_length: 'Поле должно содержать не менее %s символов.'
-
+        required: "Пожалуйста, заполните поле.",
+        valid_email: "Введите корректный email.",
+        valid_phone: "Введите корректный номер телефона.",
+        alpha: 'Это поле может содержать только буквы русского алфавита.',
+        min_length: 'Поле должно содержать не менее %s символов.',
     },
 
 /*
@@ -62,7 +61,7 @@ export default {
                     <h2>Внимание!</h2>\
                     <p>Вы не согласились с нашей <a href=\"{privacy}\" >политикой конфиденциальности</a>. По Закону, мы не имеем права получать ваши контакты.</p>\
                     <div class=\"button\">\
-                            <button class=\"confirm btn\">Согласиться с политикой</button>\
+                            <button class=\"confirm btn\"><span>Согласиться с политикой</span></button>\
                     </div>\
             </div>",
     overlayRender : '<div id="modal-not-agreement__overlay"></div>',
