@@ -1,9 +1,17 @@
 {
-  "name": "@midkard/formValidate",
-  "version": "1.3.8",
+  "name": "@midkard/formvalidate",
+  "version": "1.3.9",
   "description": "Ftont-end form validation",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midkard/FormValidate.git"
+  },
+  "bugs": "https://github.com/midkard/FormValidate/issues",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\"",
     "build": "gulp"
   },
   "author": "Midkard",

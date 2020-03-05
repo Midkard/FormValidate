@@ -76,12 +76,12 @@ var Field = function ( elem, rules, parent ) {
     }
     //Если есть placeholder
     if ( this.$placeholder ) {
-        field._placeholder( true );
+        field._placeholder();
         elem.on( 'focusin input', function () {
-            field._placeholder( true );
+            field._placeholder( 'remove' );
         } );
         elem.on( 'focusout', function () {
-            field._placeholder(  );
+            field._placeholder( 'enable' );
         } );
     }
 
@@ -288,20 +288,20 @@ $.extend( Field.prototype, {
     /*
      * Add, remove placeholder
      */
-    , _placeholder: function ( remove ) {
+    , _placeholder: function ( state ) {
         var isEmpty = (!this.elem.val());
-        remove = remove || false;
+        state = state || 'enable';
 
         //Изменяем класс соседнего label
         if ( !this.opts.hideLabels ) {
             return;
         }
-        if ( remove ) {
-            this.$placeholder.addClass( 'label-none' );
-        } else {
+        if ( 'enable' === state ) {
             if ( isEmpty ) {
                 this.$placeholder.removeClass( 'label-none' );
             }
+        } else {
+            this.$placeholder.addClass( 'label-none' );
         }
 
     }
