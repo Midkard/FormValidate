@@ -3,8 +3,8 @@ import Field from './Field';
 
 /**
  * Validator Class. Валидатор для формы. Один на всю форму.
- * @param formElement form
- * @param array opts
+ * @param form
+ * @param opts
  * 
  */
 var Validator = function ( form, opts ) {
@@ -51,7 +51,7 @@ $.extend( Validator.prototype, {
     /**
      * Генерируем правила для элемента. Пробегаем по каждому правилу из defaultRules, если элемент удовлетворяет
      * css селектору, то добавляем правило в итоговый массив.
-     * @param {$element} $field
+     * @param {HTMLElement} $field
      * @returns {Array}
      */
     _genElemRules: function ( $field ) {
@@ -63,7 +63,6 @@ $.extend( Validator.prototype, {
                 rules[this.allRules[i].rule] = true;
             }
         }
-        ;
 
         for ( var key in rules ) {
             arrRules.push( key );
@@ -98,6 +97,7 @@ $.extend( Validator.prototype, {
                 // IE uses the global event variable
                 event.returnValue = false;
             }
+            evt.stopImmediatePropagation();
         }
         return true;
     }
@@ -116,16 +116,15 @@ $.extend( Validator.prototype, {
             if ( !field.valid ) {
                 error = true;
             }
-            ;
 
         }
 
         if ( error ) {
-            for ( var i = 0; i < this.buttons.length; i++ ) {
+            for ( i = 0; i < this.buttons.length; i++ ) {
                 this.buttons[i].classList.add('disabled');
             }
         } else {
-            for ( var i = 0; i < this.buttons.length; i++ ) {
+            for ( i = 0; i < this.buttons.length; i++ ) {
                 this.buttons[i].classList.remove('disabled');
             }
         }
