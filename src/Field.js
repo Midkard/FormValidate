@@ -9,7 +9,7 @@ import getPopup from './Popup';
  * @param {Validator} parent
  * @returns {validateL#2.Field}
  */
-var Field = function ( elem, rules, parent ) {
+var Field = function (elem, rules, parent) {
     this.elem = elem;
     this.rules = rules;
     this.validator = parent;
@@ -17,132 +17,132 @@ var Field = function ( elem, rules, parent ) {
     this.value = null;
     this.oldValue = '';
 
-    if ( this.rules ) {
+    if (this.rules) {
         this.erElem = null;
         this.tipElem = null;
-        this.required = rules.indexOf( 'required' ) !== -1;
+        this.required = rules.indexOf('required') !== -1;
     }
 
     this.$placeholder = null;
-    if ( $( this.elem ).siblings( 'label' ).length ) {
-        this.$placeholder = $( this.elem ).siblings( 'label' );
+    if ($(this.elem).siblings('label').length) {
+        this.$placeholder = $(this.elem).siblings('label');
     }
     //состояние. При изменении вызыввает _checkButtons у родительского Validator
     var _valid = true;
-    Object.defineProperty( this, "valid", {
+    Object.defineProperty(this, "valid", {
         get: function () {
             return _valid;
         },
-        set: function ( value ) {
+        set: function (value) {
             // if validity changed then check buttons
-            if ( value !== _valid ) {
+            if (value !== _valid) {
                 _valid = value;
                 this.validator._checkButtons();
             }
         }
-    } );
+    });
 
     //Первоначальная проверка, без отображения ошибок.
-    this._validate( true );
+    this._validate(true);
 
     //Привязываем обработчики к собятиям элемента
     var field = this;
-    if ( this.rules ) {
-        elem.on( 'change completed', function () {
+    if (this.rules) {
+        elem.on('change completed', function () {
             field._validate();
-        } );
+        });
         if (this.opts.validateOnBlur) {
-            elem.on( 'blur', function () {
+            elem.on('blur', function () {
                 field._validate();
-            } );
+            });
         }
-        elem.on( 'input keypress keydown paste', function () {
-            field._validate( true );
-        } );
+        elem.on('input keypress keydown paste', function () {
+            field._validate(true);
+        });
     }
     //Если есть правило alpha, то нужно показать подсказку и фильтровать нажатия клавиш
-    if ( rules && ~rules.indexOf( 'alpha' ) ) {
-        elem.on( 'input', function () {
+    if (rules && ~rules.indexOf('alpha')) {
+        elem.on('input', function () {
             field._testInput();
-        } );
-        elem.on( 'focusout', function () {
-            field._tip( true );
-        } );
+        });
+        elem.on('focusout', function () {
+            field._tip(true);
+        });
     }
-    if (rules && ~rules.indexOf( 'valid_phone' )) {
-        elem.on( 'input', function () {
+    if (rules && ~rules.indexOf('valid_phone')) {
+        elem.on('input', function () {
             field._transformToPhone();
-        } );
+        });
     }
     //Если есть placeholder
-    if ( this.$placeholder ) {
+    if (this.$placeholder) {
         field._placeholder();
-        elem.on( 'focusin input', function () {
-            field._placeholder( 'remove' );
-        } );
-        elem.on( 'focusout', function () {
-            field._placeholder( 'enable' );
-        } );
+        elem.on('focusin input', function () {
+            field._placeholder('remove');
+        });
+        elem.on('focusout', function () {
+            field._placeholder('enable');
+        });
     }
 
 
 };
 
 // Добавляем статические функции для Field
-$.extend( Field.prototype, {
+$.extend(Field.prototype, {
 
     /*
      * Главная функция. Проверяет валиден ли элемент.
      */
 
-    _validate: function ( silent ) {
+    _validate: function (silent) {
 
         silent = silent || false;
-        if ( !this.rules ) {
+        if (!this.rules) {
             return true;
         }
         //валидация приостановлена
-        if (this.elem.attr( 'data-validation') === 'stopvalidation' ) {
+        if (this.elem.attr('data-validation') === 'stopvalidation') {
             this.valid = true;
             this.value = null;
             this._removeError();
             return true;
         }
-        
+
         //Если мы уже тестировали текущее значение, в других евентах, то выходим
-        if ( this.value === this.elem.val() && silent ) {
+        if (silent && this.value === (this.elem[0].type === 'file' ? this.elem[0].files : this.elem.val())) {
             return;
         }
 
         var i, ruleLength
-                , rules = this.rules.split( '|' )
-                , isEmpty = (!this.elem.val())
-                , errors = []
-                ;
+            , rules = this.rules.split('|')
+            , isEmpty = (!this.elem.val())
+            , errors = []
+        ;
 
 
-        this.value = this.elem.val();
+        this.value = this.elem[0].type === 'file' ? this.elem[0].files : this.elem.val();
 
         /*
          * Пробегаем по каждому правилу для данного элемента
          */
 
-        for ( i = 0, ruleLength = rules.length; i < ruleLength; i++ ) {
+        for (i = 0, ruleLength = rules.length; i < ruleLength; i++) {
             var method = rules[i],
-                    param = null,
-                    failed = false,
-                    parts = this.opts.ruleRegex.exec( method );
+                param = null,
+                failed = false,
+                parts = this.opts.ruleRegex.exec(method);
 
             /*
              * If this field is not required and the value is empty, break.
              * For empty field value check only required and agreemen rule.
              */
 
-            if ( isEmpty && !this.required ) {
+            if (isEmpty && !this.required) {
                 break;
             }
 
-            if ( isEmpty && ['required', 'agreement'].indexOf( method ) === -1 ) {
+            if (isEmpty && ['required', 'agreement'].indexOf(method) === -1) {
                 continue;
             }
 
@@ -150,21 +150,21 @@ $.extend( Field.prototype, {
              * If the rule has a parameter (i.e. matches[param]) split it out
              */
 
-            if ( parts ) {
+            if (parts) {
                 method = parts[1];
                 param = parts[2];
             }
 
-            if ( method.charAt( 0 ) === '!' ) {
-                method = method.substring( 1, method.length );
+            if (method.charAt(0) === '!') {
+                method = method.substring(1, method.length);
             }
 
             /*
              * If the hook is defined, run it to find any validation errors
              */
 
-            if ( typeof this._hooks[method] === 'function' ) {
-                if ( !this._hooks[method].apply( this, [param] ) ) {
+            if (typeof this._hooks[method] === 'function') {
+                if (!this._hooks[method].apply(this, [param])) {
                     failed = true;
                 }
             }
@@ -173,34 +173,34 @@ $.extend( Field.prototype, {
              * If the hook failed, add a message to the errors array
              */
 
-            if ( failed ) {
+            if (failed) {
 
                 var message = this.elem.data(method);
                 if (!message) {
                     message = this.opts.messages[method];
                 }
 
-                if ( param ) {
-                    message = message.replace( '%s', param );
+                if (param) {
+                    message = message.replace('%s', param);
                 }
-                errors.push( message );
+                errors.push(message);
 
             }
         }
 
         //Показываем, убираем ошибки
-        if ( errors.length ) {
-            if ( !silent ) {
-                this._setError( errors );
+        if (errors.length) {
+            if (!silent) {
+                this._setError(errors);
             }
             this.valid = false;
-            this.elem.attr( 'data-validation', 'invalid' );
+            this.elem.attr('data-validation', 'invalid');
         } else {
             // if (!silent) {
             this._removeError();
             // }
             this.valid = true;
-            this.elem.attr( 'data-validation', 'valid' );
+            this.elem.attr('data-validation', 'valid');
         }
         return this.valid;
     }
@@ -211,14 +211,14 @@ $.extend( Field.prototype, {
     , _testInput: function () {
 
         this.value = this.elem.val();
-        if ( !this._hooks.alpha.apply( this ) ) {
-            this.elem.val( this.oldValue );
+        if (!this._hooks.alpha.apply(this)) {
+            this.elem.val(this.oldValue);
             //подсказка
             this._tip();
         } else {
             this.oldValue = this.value;
             //убираем подсказку
-            this._tip( true );
+            this._tip(true);
         }
 
     }
@@ -226,51 +226,50 @@ $.extend( Field.prototype, {
     /*
      * AddTip
      */
-    , _tip: function ( remove ) {
+    , _tip: function (remove) {
         // Для alpha              
         remove = remove || false;
 
         var tip = this.opts.messages['alpha'];
 
-        if ( !remove ) {
-            if ( !this.tipElem ) {
-                this.tipElem = $( '<span class="message-tooltip">' + tip + '</span>' ).
-                        insertAfter( this.elem );
+        if (!remove) {
+            if (!this.tipElem) {
+                this.tipElem = $('<span class="message-tooltip">' + tip + '</span>').insertAfter(this.elem);
             }
 
-        } else if ( this.tipElem ) {
+        } else if (this.tipElem) {
             this.tipElem.remove();
             this.tipElem = null;
         }
     }
-    
+
     /**
      * Filter keyboard input
      */
     , _transformToPhone: function () {
 
         var value = this.elem.val();
-        if (! value) {
+        if (!value) {
             return;
         }
-        
+
         value = value.replace(/\D/g, '');
-        if (! value.length) {
+        if (!value.length) {
             this.elem.val('');
             return;
         }
         if ('7' === value[0] || '8' === value[0]) {
             value = value.slice(1);
         }
-        
+
         var newValue = '+7(';
         var groups = [value.slice(0, 3), value.slice(3, 6), value.slice(6, 8), value.slice(8, 10)];
-        
-        groups = groups.filter(function(el){
+
+        groups = groups.filter(function (el) {
             return el !== '';
         });
-        
-        groups.forEach(function(el, index){
+
+        groups.forEach(function (el, index) {
             if (index === 1) {
                 newValue += ') ';
             }
@@ -279,29 +278,29 @@ $.extend( Field.prototype, {
             }
             newValue += el;
         });
-        
+
         this.elem.val(newValue);
-        
+
         this._validate(true);
     }
-    
+
     /*
      * Add, remove placeholder
      */
-    , _placeholder: function ( state ) {
+    , _placeholder: function (state) {
         var isEmpty = (!this.elem.val());
         state = state || 'enable';
 
         //Изменяем класс соседнего label
-        if ( !this.opts.hideLabels ) {
+        if (!this.opts.hideLabels) {
             return;
         }
-        if ( 'enable' === state ) {
-            if ( isEmpty ) {
-                this.$placeholder.removeClass( 'label-none' );
+        if ('enable' === state) {
+            if (isEmpty) {
+                this.$placeholder.removeClass('label-none');
             }
         } else {
-            this.$placeholder.addClass( 'label-none' );
+            this.$placeholder.addClass('label-none');
         }
 
     }
@@ -309,30 +308,29 @@ $.extend( Field.prototype, {
      * Add span with error message after element
      * @param {Array} errors
      */
-    , _setError: function ( errors ) {
-        if ( this.erElem ) {
-            this.erElem.html( errors.join( ' ' ) );
+    , _setError: function (errors) {
+        if (this.erElem) {
+            this.erElem.html(errors.join(' '));
         } else {
-            if ( this.rules.indexOf( 'agreement' ) === -1 ) {
-                this.erElem = $( '<span class="message-error">' + errors.join( ' ' ) + '</span>' ).
-                        insertAfter( this.elem );
+            if (this.rules.indexOf('agreement') === -1) {
+                this.erElem = $('<span class="message-error">' + errors.join(' ') + '</span>').insertAfter(this.elem);
             }
         }
 
-        this.elem.addClass( 'error' );
-        this.elem.removeClass( 'correctly' );
+        this.elem.addClass('error');
+        this.elem.removeClass('correctly');
     }
 
     /**
      * Remove span with error message
      */
     , _removeError: function () {
-        if ( this.erElem ) {
+        if (this.erElem) {
             this.erElem.remove();
             this.erElem = null;
 
-            this.elem.addClass( 'correctly' );
-            this.elem.removeClass( 'error' );
+            this.elem.addClass('correctly');
+            this.elem.removeClass('error');
         }
     }
 
@@ -342,7 +340,7 @@ $.extend( Field.prototype, {
     , _hooks: {
         required: function () {
             var type = this.elem[0].type;
-            if ( (type === 'checkbox') || (type === 'radio') ) {
+            if ((type === 'checkbox') || (type === 'radio')) {
                 return (this.elem[0].checked === true);
             }
 
@@ -350,42 +348,82 @@ $.extend( Field.prototype, {
         }
 
         , valid_email: function () {
-            return this.opts.emailRegex.test( this.value );
+            return this.opts.emailRegex.test(this.value);
         }
 
         , valid_phone: function () {
-            return this.opts.phoneRegex.test( this.value );
+            return this.opts.phoneRegex.test(this.value);
         }
 
-        , min_length: function ( length ) {
-            if ( !this.opts.numericRegex.test( length ) ) {
+        , min_length: function (length) {
+            if (!this.opts.numericRegex.test(length)) {
                 return false;
             }
 
-            return (this.value.length >= parseInt( length, 10 ));
+            return (this.value.length >= parseInt(length, 10));
         }
 
         , alpha: function () {
-            return (this.opts.alphaRegex.test( this.value ));
+            return (this.opts.alphaRegex.test(this.value));
         }
 
         , agreement: function () {
             var type = this.elem[0].type;
-            if ( (type === 'checkbox') || (type === 'radio') ) {
+            if ((type === 'checkbox') || (type === 'radio')) {
                 var res = (this.elem[0].checked === true);
-                if ( !res ) {
-                    getPopup(this.opts).show( this.elem );
+                if (!res) {
+                    getPopup(this.opts).show(this.elem);
                 }
-                ;
                 return res;
             }
 
             return (!!this.value);
         }
 
+        , extension: function () {
+            let extensions;
+            if (this.elem.data('validationExt')) {
+                extensions = this.elem.data('validationExt').split(',').map(function(el){
+                    return el.trim();
+                });
+            } else {
+                return true;
+            }
+            for (let i = 0; i < this.value.length; i++) {
+                let extension = this.value[i].name.slice(this.value[i].name.lastIndexOf('.') + 1);
+                if (!~extensions.indexOf(extension)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        , max_size: function () {
+            console.log(this.value);
+            let max_size;
+            if (this.elem.data('validationMaxSizeMb')) {
+                max_size = parseFloat(this.elem.data('validationMaxSizeMb'));
+                if (isNaN(max_size) || ! isFinite(max_size)) {
+                    return true;
+                }
+                max_size = max_size * 1024 * 1024;
+            } else {
+                return true;
+            }
+            let size = 0;
+            for (let i = 0; i < this.value.length; i++) {
+                size += this.value[i].size;
+                console.log(size);
+                if (size > max_size) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
     }
 
-} );
+});
 
 export default Field;
 
