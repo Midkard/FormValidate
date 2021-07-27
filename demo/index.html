@@ -28,6 +28,7 @@
                     <form method="POST" action="<?php echo home_url();?>/thank">
                         <input type="hidden" name="formid" value="Запросить смету">
                         <input type="hidden" name="title" value="<?php wp_title(); ?>">
+                        <input type="file" name="attachment[]" id="attachment" data-validation-ext="jpg, txt" data-validation-max-size-mb="1" multiple="multiple">
                         <div class="hidden"><input type="text" name="tel"/></div>
                         <div class="form-group">
                             <label>Имя</label>
