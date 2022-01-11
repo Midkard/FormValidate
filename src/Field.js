@@ -78,10 +78,10 @@ var Field = function (elem, rules, parent) {
     if (this.$placeholder) {
         field._placeholder();
         elem.on('focusin input', function () {
-            field._placeholder('remove');
+            field._placeholder('focusin');
         });
         elem.on('focusout', function () {
-            field._placeholder('enable');
+            field._placeholder('focusout');
         });
     }
 
@@ -289,15 +289,17 @@ $.extend(Field.prototype, {
      */
     , _placeholder: function (state) {
         var isEmpty = (!this.elem.val());
-        state = state || 'enable';
+        state = state || 'focusout';
 
         //Изменяем класс соседнего label
         if (!this.opts.hideLabels) {
             return;
         }
-        if ('enable' === state) {
+        if ('focusout' === state) {
             if (isEmpty) {
                 this.$placeholder.removeClass('label-none');
+            } else {
+                this.$placeholder.addClass('label-none');
             }
         } else {
             this.$placeholder.addClass('label-none');
