@@ -93,9 +93,9 @@ $.extend( Validator.prototype, {
         if ( error ) {
             if ( evt && evt.preventDefault ) {
                 evt.preventDefault();
-            } else if ( event ) {
+            } else if ( evt ) {
                 // IE uses the global event variable
-                event.returnValue = false;
+                evt.returnValue = false;
             }
             evt.stopImmediatePropagation();
         }

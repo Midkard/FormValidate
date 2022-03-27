@@ -45,7 +45,7 @@ var Field = function (elem, rules, parent) {
     //Первоначальная проверка, без отображения ошибок.
     this._validate(true);
 
-    //Привязываем обработчики к собятиям элемента
+    //Привязываем обработчики к событиям элемента
     var field = this;
     if (this.rules) {
         elem.on('change completed', function () {
@@ -70,6 +70,7 @@ var Field = function (elem, rules, parent) {
         });
     }
     if (rules && ~rules.indexOf('valid_phone')) {
+        field._transformToPhone();
         elem.on('input', function () {
             field._transformToPhone();
         });

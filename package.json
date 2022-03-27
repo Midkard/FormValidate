@@ -1,6 +1,6 @@
 {
   "name": "@midkard/formvalidate",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Ftont-end form validation",
   "publishConfig": {
     "access": "public"
