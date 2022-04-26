@@ -75,6 +75,13 @@ var Field = function (elem, rules, parent) {
             field._transformToPhone();
         });
     }
+    if (rules && ~rules.indexOf('valid_international')) {
+        field._transformToInternational();
+        elem.on('input', function () {
+            field._transformToInternational();
+        });
+    }
+
     //Если есть placeholder
     if (this.$placeholder) {
         field._placeholder();
@@ -279,6 +286,28 @@ $.extend(Field.prototype, {
             }
             newValue += el;
         });
+
+        this.elem.val(newValue);
+
+        this._validate(true);
+    }
+    /**
+     * Filter keyboard input
+     */
+    , _transformToInternational: function () {
+
+        var value = this.elem.val();
+        if (!value) {
+            return;
+        }
+
+        value = value.replace(/\D/g, '');
+        if (!value.length) {
+            this.elem.val('');
+            return;
+        }
+
+        let newValue = '+' + value;
 
         this.elem.val(newValue);
 

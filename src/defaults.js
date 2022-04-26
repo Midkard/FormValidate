@@ -15,6 +15,10 @@ export default {
             rule: 'valid_phone'
         },
         {
+            el: '.valid_international',
+            rule: 'valid_international'
+        },
+        {
             el: '[name="name1"], .valid_name',
             rule: 'alpha|min_length[2]'
         },
@@ -36,7 +40,7 @@ export default {
      * Здесь расположены регулярные выражения для тестирования. rule и numeric вспомогательные(менять не желательно).
      * Остальные можно менять.
      */
-    ruleRegex: /^(.+?)\[(.+)\]$/,
+    ruleRegex: /^(.+?)\[(.+)]$/,
     numericRegex: /^[0-9]+$/,
     emailRegex: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/,
     alphaRegex: /^[а-яё ]*$/i,

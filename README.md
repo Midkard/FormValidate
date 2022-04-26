@@ -39,6 +39,10 @@ rules: [
         rule: 'valid_phone'
     },
     {
+        el: '.valid_international',
+        rule: 'valid_international'
+    },
+    {
         el: '[name="name1"], .valid_name',
         rule: 'alpha|min_length[2]'
     },
