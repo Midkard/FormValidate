@@ -1,10 +1,5 @@
 $(function(){
-    $('form').validate({
-        alphaRegex: /^.*$/i,
-        messages: {
-            alpha: '',
-        },
-    });
+    $('form').validate();
 });
 
 

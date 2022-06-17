@@ -217,6 +217,12 @@ $.extend(Field.prototype, {
      * Filter keyboard input
      */
     , _testInput: function () {
+        //валидация приостановлена
+        if (this.elem.attr('data-validation') === 'stopvalidation') {
+            //убираем подсказку
+            this._tip(true);
+            return;
+        }
 
         this.value = this.elem.val();
         if (!this._hooks.alpha.apply(this)) {

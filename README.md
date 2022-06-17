@@ -112,3 +112,10 @@ overlayRender : '<div id="modal-not-agreement__overlay"></div>'
 ##### privacy
 
 Адрес страницы политики конфидециальности. Подставляется в popupRender вместо {privacy}. Значение по умолчанию '/privacy-policy/'.
+
+## Приостановка валидации
+
+Для приостановки валидации полю необходимо добавить аттрибут data-validation со значением "stopvalidation".
+```html
+<input name="phone" class="valid_phone" data-validation="stopvalidation" />
+```

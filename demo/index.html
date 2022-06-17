@@ -25,14 +25,14 @@
                     <div class="form-desk">
                         Оставьте свой номер - перезвоним в самое ближайшее рабочее время
                     </div>
-                    <form method="POST" action="<?php echo home_url();?>/thank">
+                    <form method="POST" action="/thank">
                         <input type="hidden" name="formid" value="Запросить смету">
-                        <input type="hidden" name="title" value="<?php wp_title(); ?>">
+                        <input type="hidden" name="title" value="">
                         <input type="file" name="attachment[]" id="attachment" data-validation-ext="jpg, txt" data-validation-max-size-mb="1" multiple="multiple">
                         <div class="hidden"><input type="text" name="tel"/></div>
                         <div class="form-group">
                             <label>Имя</label>
-                            <input type="text" name="name1" class="form-control" placeholder="Ваше имя" value="Na"/>
+                            <input type="text" name="name1" class="form-control" placeholder="Ваше имя" value="Na" data-validation="stopvalidation"/>
                         </div>
                         <div class="form-group">
                             <input type="text" name="phone" class="form-control required input-lg valid_international" value="79101234567" placeholder="Номер телефона" data-required="Где телефон то?"/>
