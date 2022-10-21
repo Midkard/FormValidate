@@ -262,7 +262,7 @@ $.extend(Field.prototype, {
      */
     , _transformToPhone: function () {
 
-        var value = this.elem.val();
+        let value = this.elem.val();
         if (!value) {
             return;
         }
@@ -272,26 +272,8 @@ $.extend(Field.prototype, {
             this.elem.val('');
             return;
         }
-        if ('7' === value[0] || '8' === value[0]) {
-            value = value.slice(1);
-        }
 
-        var newValue = '+7(';
-        var groups = [value.slice(0, 3), value.slice(3, 6), value.slice(6, 8), value.slice(8, 10)];
-
-        groups = groups.filter(function (el) {
-            return el !== '';
-        });
-
-        groups.forEach(function (el, index) {
-            if (index === 1) {
-                newValue += ') ';
-            }
-            if (index > 1) {
-                newValue += '-';
-            }
-            newValue += el;
-        });
+        const newValue = formatNumber(regexpToFormat(this.opts.phoneRegex.source), value);
 
         this.elem.val(newValue);
 
@@ -421,7 +403,7 @@ $.extend(Field.prototype, {
         , extension: function () {
             let extensions;
             if (this.elem.data('validationExt')) {
-                extensions = this.elem.data('validationExt').split(',').map(function(el){
+                extensions = this.elem.data('validationExt').split(',').map(function (el) {
                     return el.trim();
                 });
             } else {
@@ -441,7 +423,7 @@ $.extend(Field.prototype, {
             let max_size;
             if (this.elem.data('validationMaxSizeMb')) {
                 max_size = parseFloat(this.elem.data('validationMaxSizeMb'));
-                if (isNaN(max_size) || ! isFinite(max_size)) {
+                if (isNaN(max_size) || !isFinite(max_size)) {
                     return true;
                 }
                 max_size = max_size * 1024 * 1024;
@@ -465,4 +447,25 @@ $.extend(Field.prototype, {
 
 export default Field;
 
+function formatNumber(mask, number) {
+    const fixed = mask.replace(/\D/g, '')
+    if (number.length >= fixed.length && fixed === number.slice(0, fixed.length)) {
+        number = number.slice(fixed.length)
+    }
+    let s = '' + number, r = '';
+    for (let im = 0, is = 0; im < mask.length && is < s.length; im++) {
+        r += mask.charAt(im) === 'X' ? s.charAt(is++) : mask.charAt(im);
+    }
+    return r;
+}
+
+function regexpToFormat(regexp) {
+    return regexp
+        .replaceAll("\\", '')
+        .replace("^", '')
+        .replace("$", '')
+        .replace(/d{(\d+)}/g, function (str, number) {
+            return 'X'.repeat(+number)
+        })
+}
 
