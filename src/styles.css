@@ -1,6 +1,31 @@
-.iti__flag {background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/img/flags.png");}
+.iti {
+    width: 100%;
+}
+
+.iti__country-list {
+    z-index: 20;
+}
+
+.iti__country::before, .iti__country::after {
+    display: none;
+}
+
+.iti__dial-code {
+    color: inherit;
+}
+
+.iti__flag {
+    background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/img/flags.png");
+}
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .iti__flag {background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/img/flags@2x.png");}
+    .iti__flag {
+        background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/img/flags@2x.png");
+    }
+}
+
+.iti-mobile .iti--container {
+    z-index: 99999;
+    width: auto;
 }
 
