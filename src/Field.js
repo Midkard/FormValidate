@@ -1,109 +1,125 @@
 import $ from 'jquery';
 import getPopup from './Popup';
+import intlTelInput from 'intl-tel-input';
 
 /**
  * Field Class
  * Объект класса Field создается для каждого элемента, для которого нашлись правила.
- * @param {$element} elem
- * @param {String} rules
- * @param {Validator} parent
- * @returns {validateL#2.Field}
  */
-var Field = function (elem, rules, parent) {
-    this.elem = elem;
-    this.rules = rules;
-    this.validator = parent;
-    this.opts = parent.opts;
-    this.value = null;
-    this.oldValue = '';
+class Field {
+    /**
+     * 
+     * @param {JQuery<HTMLInputElement>} elem 
+     * @param {string} rules 
+     * @param {Validator} parent 
+     */
+    constructor(elem, rules, parent) {
+        this.elem = elem;
+        this.rules = rules;
+        this.validator = parent;
+        this.opts = parent.opts;
+        this.value = null;
+        this.oldValue = '';
 
-    if (this.rules) {
-        this.erElem = null;
-        this.tipElem = null;
-        this.required = rules.indexOf('required') !== -1;
-    }
-
-    this.$placeholder = null;
-    if ($(this.elem).siblings('label').length) {
-        this.$placeholder = $(this.elem).siblings('label');
-    }
-    //состояние. При изменении вызыввает _checkButtons у родительского Validator
-    var _valid = true;
-    Object.defineProperty(this, "valid", {
-        get: function () {
-            return _valid;
-        },
-        set: function (value) {
-            // if validity changed then check buttons
-            if (value !== _valid) {
-                _valid = value;
-                this.validator._checkButtons();
-            }
+        if (this.rules) {
+            this.erElem = null;
+            this.tipElem = null;
+            this.required = rules.indexOf('required') !== -1;
         }
-    });
 
-    //Первоначальная проверка, без отображения ошибок.
-    this._validate(true);
-
-    //Привязываем обработчики к событиям элемента
-    var field = this;
-    if (this.rules) {
-        elem.on('change completed', function () {
-            field._validate();
+        this.$placeholder = null;
+        if ($(this.elem).siblings('label').length) {
+            this.$placeholder = $(this.elem).siblings('label');
+        }
+        //состояние. При изменении вызыввает _checkButtons у родительского Validator
+        var _valid = true;
+        Object.defineProperty(this, "valid", {
+            get: function () {
+                return _valid;
+            },
+            set: function (value) {
+                // if validity changed then check buttons
+                if (value !== _valid) {
+                    _valid = value;
+                    this.validator._checkButtons();
+                }
+            }
         });
-        if (this.opts.validateOnBlur) {
-            elem.on('blur', function () {
+
+        //Привязываем обработчики к событиям элемента
+        var field = this;
+        if (this.rules) {
+            elem.on('change completed', function () {
                 field._validate();
             });
+            if (this.opts.validateOnBlur) {
+                elem.on('blur', function () {
+                    field._validate();
+                });
+            }
+            elem.on('input keypress keydown paste', function () {
+                field._validate(true);
+            });
         }
-        elem.on('input keypress keydown paste', function () {
-            field._validate(true);
-        });
-    }
-    //Если есть правило alpha, то нужно показать подсказку и фильтровать нажатия клавиш
-    if (rules && ~rules.indexOf('alpha')) {
-        elem.on('input', function () {
-            field._testInput();
-        });
-        elem.on('focusout', function () {
-            field._tip(true);
-        });
-    }
-    if (rules && ~rules.indexOf('valid_phone')) {
-        field._transformToPhone();
-        elem.on('input', function () {
+        //Если есть правило alpha, то нужно показать подсказку и фильтровать нажатия клавиш
+        if (rules && ~rules.indexOf('alpha')) {
+            elem.on('input', function () {
+                field._testInput();
+            });
+            elem.on('focusout', function () {
+                field._tip(true);
+            });
+        }
+        if (rules && ~rules.indexOf('valid_phone')) {
             field._transformToPhone();
-        });
+            elem.on('input', function () {
+                field._transformToPhone();
+            });
+        }
+        if (rules && ~rules.indexOf('valid_international')) {
+            field.iti = intlTelInput(elem[0], {
+                nationalMode: false,
+                formatOnDisplay: true,
+                preferredCountries: [],
+                initialCountry: "auto",
+                geoIpLookup: function (success) {
+                    $.get("https://ipinfo.io", function () { }, "jsonp").always(function (resp) {
+                        const countryCode = resp?.country ? resp.country : "ru";
+                        success(countryCode);
+                    });
+                },
+                utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.min.js',
+            });
+            elem.on('input', function () {
+                field._transformToInternational();
+            });
+
+            elem.on('countrychange', function () {
+                field._validate(true);
+            });
+        }
+
+        //Первоначальная проверка, без отображения ошибок.
+        this._validate(true);
+
+        //Если есть placeholder
+        if (this.$placeholder) {
+            field._placeholder();
+            elem.on('focusin input', function () {
+                field._placeholder('focusin');
+            });
+            elem.on('focusout', function () {
+                field._placeholder('focusout');
+            });
+        }
+
+
     }
-    if (rules && ~rules.indexOf('valid_international')) {
-        field._transformToInternational();
-        elem.on('input', function () {
-            field._transformToInternational();
-        });
-    }
-
-    //Если есть placeholder
-    if (this.$placeholder) {
-        field._placeholder();
-        elem.on('focusin input', function () {
-            field._placeholder('focusin');
-        });
-        elem.on('focusout', function () {
-            field._placeholder('focusout');
-        });
-    }
-
-
-};
-
-// Добавляем статические функции для Field
-$.extend(Field.prototype, {
 
     /*
      * Главная функция. Проверяет валиден ли элемент.
      */
-
-    _validate: function (silent) {
+    _validate(silent) {
 
         silent = silent || false;
         if (!this.rules) {
@@ -126,7 +142,7 @@ $.extend(Field.prototype, {
             , rules = this.rules.split('|')
             , isEmpty = (!this.elem.val())
             , errors = []
-        ;
+            ;
 
 
         this.value = this.elem[0].type === 'file' ? this.elem[0].files : this.elem.val();
@@ -216,7 +232,7 @@ $.extend(Field.prototype, {
     /**
      * Filter keyboard input
      */
-    , _testInput: function () {
+    _testInput() {
         //валидация приостановлена
         if (this.elem.attr('data-validation') === 'stopvalidation') {
             //убираем подсказку
@@ -240,7 +256,7 @@ $.extend(Field.prototype, {
     /*
      * AddTip
      */
-    , _tip: function (remove) {
+    _tip(remove) {
         // Для alpha              
         remove = remove || false;
 
@@ -260,7 +276,7 @@ $.extend(Field.prototype, {
     /**
      * Filter keyboard input
      */
-    , _transformToPhone: function () {
+    _transformToPhone() {
 
         let value = this.elem.val();
         if (!value) {
@@ -282,30 +298,21 @@ $.extend(Field.prototype, {
     /**
      * Filter keyboard input
      */
-    , _transformToInternational: function () {
+    _transformToInternational() {
 
-        var value = this.elem.val();
-        if (!value) {
-            return;
+        if (typeof intlTelInputUtils !== 'undefined') { // utils are lazy loaded, so must check
+            var currentText = this.iti.getNumber(intlTelInputUtils.numberFormat.E164);
+            if (typeof currentText === 'string') { // sometimes the currentText is an object :)
+                this.iti.setNumber(currentText); // will autoformat because of formatOnDisplay=true
+            }
         }
-
-        value = value.replace(/\D/g, '');
-        if (!value.length) {
-            this.elem.val('');
-            return;
-        }
-
-        let newValue = '+' + value;
-
-        this.elem.val(newValue);
-
         this._validate(true);
     }
 
     /*
      * Add, remove placeholder
      */
-    , _placeholder: function (state) {
+    _placeholder(state) {
         var isEmpty = (!this.elem.val());
         state = state || 'focusout';
 
@@ -328,7 +335,7 @@ $.extend(Field.prototype, {
      * Add span with error message after element
      * @param {Array} errors
      */
-    , _setError: function (errors) {
+    _setError(errors) {
         if (this.erElem) {
             this.erElem.html(errors.join(' '));
         } else {
@@ -344,7 +351,7 @@ $.extend(Field.prototype, {
     /**
      * Remove span with error message
      */
-    , _removeError: function () {
+    _removeError() {
         if (this.erElem) {
             this.erElem.remove();
             this.erElem = null;
@@ -357,7 +364,7 @@ $.extend(Field.prototype, {
     /**
      * Функции, которые можно вызвать для тестирования содержимого поля.
      */
-    , _hooks: {
+    _hooks = {
         required: function () {
             var type = this.elem[0].type;
             if ((type === 'checkbox') || (type === 'radio')) {
@@ -373,6 +380,13 @@ $.extend(Field.prototype, {
 
         , valid_phone: function () {
             return this.opts.phoneRegex.test(this.value);
+        }
+
+        , valid_international: function () {
+            if (this.iti) {
+                return this.iti.isValidNumber();
+            }
+            return true;
         }
 
         , min_length: function (length) {
@@ -442,6 +456,12 @@ $.extend(Field.prototype, {
         }
 
     }
+}
+
+// Добавляем статические функции для Field
+$.extend(Field.prototype, {
+
+
 
 });
 

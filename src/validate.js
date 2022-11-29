@@ -2,6 +2,8 @@ import $ from 'jquery';
 import init3rd from './init3rd';
 import defaults from './defaults';
 import Validator from './Validator';
+import 'intl-tel-input/build/css/intlTelInput.css';
+import './styles.css';
 
 init3rd();
 /**
@@ -30,7 +32,7 @@ $.fn.validate = function ( options ) {
 
 
         // Скрытие открытие textarea wtf?
-        $( this ).find( 'span.add-textarea' ).click( function () {
+        $( this ).find( 'span.add-textarea' ).on( 'click', function () {
             $( this ).toggleClass( 'opened' );
         } );
 

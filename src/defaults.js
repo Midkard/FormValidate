@@ -54,6 +54,7 @@ export default {
         required: "Пожалуйста, заполните поле.",
         valid_email: "Введите корректный email.",
         valid_phone: "Введите корректный номер телефона.",
+        valid_international: 'Invalid phone number',
         alpha: 'Это поле может содержать только буквы русского алфавита.',
         min_length: 'Поле должно содержать не менее %s символов.',
         extension: 'Данный тип файлов не допускается',

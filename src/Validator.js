@@ -3,58 +3,53 @@ import Field from './Field';
 
 /**
  * Validator Class. Валидатор для формы. Один на всю форму.
- * @param form
- * @param opts
  * 
  */
-var Validator = function ( form, opts ) {
+class Validator {
 
-    this.form = form;
-    this.allRules = opts.rules;
-    this.opts = opts;
-    this.buttons = [];
-    this.fields = [];
+    constructor(form, opts) {
 
-    /*
-     * Проходим по каждому элементу формы
-     */
-    for ( var i = 0; i < form.elements.length; i++ ) {
-        //кнопки добавляем в this.buttons
-        if ( form.elements[i].type === 'submit' ) {
-            this.buttons.push( form.elements[i] );
-            continue;
+        this.form = form;
+        this.allRules = opts.rules;
+        this.opts = opts;
+        this.buttons = [];
+        this.fields = [];
+
+        /*
+         * Проходим по каждому элементу формы
+         */
+        for (var i = 0; i < form.elements.length; i++) {
+            //кнопки добавляем в this.buttons
+            if (form.elements[i].type === 'submit') {
+                this.buttons.push(form.elements[i]);
+                continue;
+            }
+            //пробуем составить правила для элемента
+            var $elem = $(form.elements[i]), fieldRules = this._genElemRules($elem);
+            // если удалось найти подходящие правила, то создаем объект Field и пихаем его в this.fields
+            if (fieldRules.length) {
+                this.fields.push(new Field($elem, fieldRules.join('|'), this));
+            } else {
+                this.fields.push(new Field($elem, null, this));
+            }
         }
-        //пробуем составить правила для элемента
-        var $elem = $( form.elements[i] )
-                , fieldRules = this._genElemRules( $elem )
-                ;
-        // если удалось найти подходящие правила, то создаем объект Field и пихаем его в this.fields
-        if ( fieldRules.length ) {
-            this.fields.push( new Field( $elem, fieldRules.join( '|' ), this ) );
-        } else {
-            this.fields.push( new Field( $elem, null, this ) );
-        }
+
+        //Устанавливаем первоначальное значение кнопок(отключены\включены)
+        this._checkButtons();
+
+        //Добавляем обработчик события(submit)
+        $(form).submit($.proxy(this, '_validateForm'));
+        //        console.dir(this);
     }
 
-    //Устанавливаем первоначальное значение кнопок(отключены\включены)
-    this._checkButtons();
-
-    //Добавляем обработчик события(submit)
-    $( form ).submit( $.proxy( this, '_validateForm' ) );
-//        console.dir(this);
-
-};
-
-// Добавляем статические функции для Validator
-$.extend( Validator.prototype, {
-
+    
     /**
      * Генерируем правила для элемента. Пробегаем по каждому правилу из defaultRules, если элемент удовлетворяет
      * css селектору, то добавляем правило в итоговый массив.
      * @param {HTMLElement} $field
      * @returns {Array}
      */
-    _genElemRules: function ( $field ) {
+     _genElemRules($field) {
         var rules = {},
                 arrRules = [];
 
@@ -77,7 +72,7 @@ $.extend( Validator.prototype, {
      * @param {Event} evt
      * @returns {Boolean}
      */
-    , _validateForm: function ( evt ) {
+    _validateForm(evt) {
         var error = false;
 
 
@@ -107,7 +102,7 @@ $.extend( Validator.prototype, {
      * Делает почти то же самое, что и _validateForm, только от результата зависит состояние кнопок.
      * Не заставляет поля перепроверять себя, использует переменную valid у Field.
      */
-    , _checkButtons: function () {
+    _checkButtons() {
         var error = false;
 
         for ( var i = 0; i < this.fields.length; i++ ) {
@@ -131,8 +126,8 @@ $.extend( Validator.prototype, {
 
 
     }
+}
 
-} );
 
 export default Validator;
 
