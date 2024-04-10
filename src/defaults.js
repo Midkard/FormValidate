@@ -7,11 +7,11 @@ export default {
      */
     rules: [
         {
-            el: '.required',
+            el: '[required]',
             rule: 'required'
         },
         {
-            el: '.inp, .valid_phone',
+            el: '[type="tel"], .valid_phone',
             rule: 'valid_phone'
         },
         {
