@@ -1,6 +1,6 @@
 {
   "name": "@midkard/formvalidate",
-  "version": "1.4.2",
+  "version": "1.4.4",
   "description": "Ftont-end form validation",
   "publishConfig": {
     "access": "public"
@@ -18,12 +18,9 @@
   "license": "ISC",
   "main": "./dist/validate.min.js",
   "devDependencies": {
-    "browser-sync": "^2.18.13",
-    "gulp": "^4.0.2",
+    "gulp": "^5.0.0",
     "gulp-clean": "^0.4.0",
     "gulp-concat-util": "^0.5.5",
-    "webpack": "^4.40.2",
-    "webpack-cli": "^3.3.9",
-    "webpack-stream": "^5.2.1"
+    "webpack-stream": "^7.0.0"
   }
 }
