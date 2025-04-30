@@ -7,11 +7,11 @@ export default {
      */
     rules: [
         {
-            el: '.required',
+            el: '.required, [required]',
             rule: 'required'
         },
         {
-            el: '.inp, .valid_phone',
+            el: '[type="tel"], .inp, .valid_phone',
             rule: 'valid_phone'
         },
         {
@@ -59,6 +59,7 @@ export default {
         min_length: 'Поле должно содержать не менее %s символов.',
         extension: 'Данный тип файлов не допускается',
         max_size: 'Превышен предельный размер файлов',
+        agreement: 'Примите пользовательское соглашение.',
     },
 
     /*

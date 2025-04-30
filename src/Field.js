@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import getPopup from './Popup';
 import intlTelInput from 'intl-tel-input';
 
 /**
@@ -341,6 +340,8 @@ class Field {
         } else {
             if (this.rules.indexOf('agreement') === -1) {
                 this.erElem = $('<span class="message-error">' + errors.join(' ') + '</span>').insertAfter(this.elem);
+            } else {
+                this.erElem = $('<span class="message-error">' + errors.join(' ') + '</span>').insertBefore(this.elem);
             }
         }
 
@@ -405,9 +406,6 @@ class Field {
             var type = this.elem[0].type;
             if ((type === 'checkbox') || (type === 'radio')) {
                 var res = (this.elem[0].checked === true);
-                if (!res) {
-                    getPopup(this.opts).show(this.elem);
-                }
                 return res;
             }
 

@@ -12,6 +12,7 @@ init3rd();
  * 
  */
 $.fn.validate = function ( options ) {
+    $( 'input.agreement' ).prop( "checked", false );
     // Если коллекция пуста, то заканчиваем сразу
     if ( !this.length ) {
         return;
